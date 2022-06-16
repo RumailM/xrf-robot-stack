@@ -1,6 +1,0 @@
-devel_space: /home/r/tool_ws/devel
-install: false
-install_space: /home/r/tool_ws/install
-profile: default
-source_space: /home/r/tool_ws/src
-workspace: /home/r/tool_ws

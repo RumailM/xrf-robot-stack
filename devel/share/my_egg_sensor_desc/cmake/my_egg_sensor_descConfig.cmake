@@ -1,1 +1,0 @@
-/home/r/tool_ws/devel/.private/my_egg_sensor_desc/share/my_egg_sensor_desc/cmake/my_egg_sensor_descConfig.cmake

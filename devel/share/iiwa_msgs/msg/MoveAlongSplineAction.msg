@@ -1,1 +1,0 @@
-/home/r/tool_ws/devel/.private/iiwa_msgs/share/iiwa_msgs/msg/MoveAlongSplineAction.msg

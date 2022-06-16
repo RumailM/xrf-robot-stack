@@ -1,1 +1,0 @@
-/home/r/tool_ws/devel/.private/iiwa_tool_examples/lib/pkgconfig/iiwa_tool_examples.pc

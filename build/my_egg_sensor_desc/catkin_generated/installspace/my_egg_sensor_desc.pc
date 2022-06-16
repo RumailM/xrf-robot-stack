@@ -1,8 +1,0 @@
-prefix=/home/r/tool_ws/install
-
-Name: my_egg_sensor_desc
-Description: Description of my_egg_sensor_desc
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
