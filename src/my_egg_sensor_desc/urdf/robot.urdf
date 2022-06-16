@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!-- =================================================================================== -->
+<!-- |     sudo rm build/ devel/ -r ; catkin_make ; source devel/setup.bash            | -->
+<!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
+<!-- =================================================================================== -->
+<robot name="egg" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="workpeice_link">
+        <collision name="left_bump_sensor_collision">
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <geometry>
+              <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/>
+          </geometry>
+        </collision>
+        <visual>
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <geometry>
+              <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/>
+          </geometry>         
+        </visual>
+        <inertial>
+          <mass value="10"/>
+          <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+        </inertial>
+    </link>
+    <gazebo>
+      <static>true</static>
+    </gazebo>
+ 
+    
+  <!-- Contact Sensor -->
+  <gazebo reference="workpeice_link">
+    <sensor name="workpeice_contact_sensor" type="contact">
+      <always_on>true</always_on>
+      <contact>
+        <collision>workpeice_link_fixed_joint_lump__left_bump_sensor_collision_collision</collision>
+      </contact>
+      
+      <plugin filename="libgazebo_ros_bumper.so" name="workpeice_contact_sensor_plugin">
+        <bumperTopicName>collisionTopicWorkpeice</bumperTopicName>
+        
+        <frameName>workpeice_link</frameName>
+      </plugin>
+      <update_rate> 5 </update_rate>
+    </sensor>
+  </gazebo>
+</robot>
