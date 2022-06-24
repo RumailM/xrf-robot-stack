@@ -50,7 +50,7 @@ RUN echo "source /xrf-robot-stack/devel/setup.bash" >> ~/.bashrc
 
 # { sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & { sleep 14; /xrf-robot-stack/src/matlab_files/for_redistribution_files_only/./run_fcomp.sh $MCR_PATH 1; } &
 
-{ sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & 
+# { sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & 
 
 
 
