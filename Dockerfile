@@ -1,4 +1,4 @@
-#sudo docker build . --tag xrf-robot-repo
+#
 # sudo docker run -it --env="DISPLAY" --env="QT_X11_NO_MITSHM=1"  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  xrf-robot-repo /bin/bash
 # sudo docker run -it --privileged --net=host --env="DISPLAY" --env="QT_X11_NO_MITSHM=1"  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  xrf-robot-repo /bin/bash
 # docker ps 
@@ -17,11 +17,11 @@
 
 FROM osrf/ros:melodic-desktop-full  
 
+SHELL ["/bin/bash", "-c"] 
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git apt-utils  python3-catkin-tools unzip nano default-jre\
     && rm -rf /var/lib/apt/lists/*
-
-SHELL ["/bin/bash", "-c"] 
 
 RUN source ./ros_entrypoint.sh &&  git clone https://github.com/RumailM/xrf-robot-stack 
 
@@ -51,7 +51,7 @@ RUN echo '#!/bin/bash' >> replay_toolpath.sh
 
 RUN echo "{ sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & { sleep 14; /xrf-robot-stack/src/matlab_files/for_redistribution_files_only/./run_tool_path_generator.sh /usr/local/MATLAB/MATLAB_Runtime/v912/ 1 0.05 1 10 1 0.11 "/xrf-robot-stack/src/matlab_files/for_redistribution_files_only/pose.mat"; } &" >> /generate_toolpath.sh
 RUN echo "{ sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & " >> /simulate.sh
-RUN echo "{ sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & { sleep 14; /xrf-robot-stack/src/matlab_files/for_redistribution_files_only/./run_tool_path_replay.sh /usr/local/MATLAB/MATLAB_Runtime/v912/  "/xrf-robot-stack/src/matlab_files/for_redistribution_files_only/filtered.mat"; } &" >> /replay_toolpath.sh
+RUN echo "{ sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & { sleep 14; /xrf-robot-stack/src/matlab_files/for_redistribution_files_only/./run_tool_path_replay.sh /usr/local/MATLAB/MATLAB_Runtime/v912/  "filtered.mat"; } &" >> /replay_toolpath.sh
 
 # { sleep 2; roscore; } & { sleep 4; roslaunch iiwa_gazebo iiwa_gazebo_with_sunrise.launch; } & { sleep 10; python /xrf-robot-stack/scripts/collisionHandler.py; } & { sleep 14; /xrf-robot-stack/src/matlab_files/for_redistribution_files_only/./run_fcomp.sh $MCR_PATH 1 0.05 1 10 1 0.11 "pose.mat"; } &
 
