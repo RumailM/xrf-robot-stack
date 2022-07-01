@@ -7,6 +7,11 @@
 %%  Import the object to read and plot
 [V F N name] = stlRead("egg_50cm_3120.stl");
 
+% [V F N name] = stlRead("Trash_can_v4.stl"); % 15 seconds
+
+% [V F N name] = stlRead("trash_can.stl"); % 15 seconds
+
+
 
 %% Set transformation parameters
 x_displacement = 0.95; 
@@ -21,19 +26,26 @@ yaw_angle_rotate = 0;
 % p = [x_displacement; y_displacement; z_displacement];
 % T = [eye(3) p; 0 0 0 1]
 %% Get triangle centroids and compute offsets
-[t,c] = getTriangles(F,V); % get triangles and centroids to calculate poses
+
+[t,c] = getTriangles(F,V); % get triangles and centroids to calculate poses 11 seconds for trashcan
+
 offsets = c + lambda*N;
 invertedNormals = -1*N;
 
 %% Get poses
-poses = getPose(offsets,invertedNormals);
-angles = [];
+
+% poses = getPose(offsets,invertedNormals); %%24 seconds poses
+poses = getPoseQ(offsets,invertedNormals); %%24 seconds poses
+% remove nan's due to edge cases
+poses(any(isnan(poses), 2), :) = [];
+
+angles = zeros(1,size(poses,1));
 for i=1:size(poses,1)
     angle = atan2d(poses(i,2),poses(i,1));
     if angle <0
         angle = angle + 360;
     end
-    angles = [angles angle];
+    angles(i) = angle;
 
 end
 %%
@@ -41,24 +53,30 @@ num_sectors = 48;
 degrees_per_sector = 360/num_sectors;
 g = {};
 for j=1:num_sectors
-    temp = [];
+    temp = zeros(size(angles,2),1);
     for i=1:size(angles,2)
            
             if angles(i) >= degrees_per_sector*(j-1) && angles(i) < degrees_per_sector*(j) 
-                temp = [temp i];
+                temp(i) = i;
             end
     end
 
-    g{j} = temp;
+    g{j} = nonzeros(temp)';
 end
+
 %%
+tic
+toc
 l = {};
 offsets_sectored= {};
 for j=1:size(g,2)
     l{j} = poses(g{1,j},:);
     offsets_sectored{j} = offsets(g{1,j},:);
 end
+toc
 %%
+tic
+toc
 rot_q_sectors = {};
 rot_frame_setors = {};
 translated_rotated_v_sectored = {};
@@ -67,8 +85,8 @@ rot_inverted_normal_sectored = {};
 
 for i=1:size(l,2)
 
-xyz= l{1,i}(:,4:6);
-q = quaternion([xyz(:,1) xyz(:,2) xyz(:,3)],"eulerd","XYZ","frame");
+wxyz= l{1,i}(:,4:7);
+q = quaternion(wxyz);
 
 % 1) Compute rotation matrix and a) rotate frames
 rotms =quat2rotm(q);
@@ -101,22 +119,27 @@ translated_rotated_V(:,3) = rot_v(:,3)+z_displacement;
 translated_rotated_v_sectored{i} = translated_rotated_V;
 translated_rotated_offsets_sectored{i} =translated_rotated_offsets;
 end
-
+toc
+%%
+tic
+toc
 % 3) orient poses so that scanning head always faces up
 y_1 = [0 ;1 ;0];
+P = [0, 0, 0]';
+C = [0,0,-2]';
 % count = 0
 for i=1:size(l,2)
     for j = 1: size(rot_q_sectors{i},1)
 %         count = count + 1
-        qq = rot_q_sectors{i}(j);
-        y_1 = [0; 1; 0];p_y = quat2rotm(qq)*y_1; 
-        x_1 = [1 ; 0 ; 0]; p_x = quat2rotm(qq)*x_1;
-        z_1 = [0 ;0 ;1]; p_z = quat2rotm(qq)*z_1;
+        qq = rot_q_sectors{i}(j);qq_rotm = quat2rotm(qq);
+        
+        y_1 = [0; 1; 0];p_y = qq_rotm*y_1; 
+        x_1 = [1 ; 0 ; 0]; p_x = qq_rotm*x_1;
+        z_1 = [0 ;0 ;1]; p_z = qq_rotm*z_1;
         % compute the normal
         n = cross(p_y, p_x) ;
         n = n / norm(n);
-        P = [0, 0, 0]';
-        C = [0,0,-2]';
+        
         % project onto the plane
         C_proj = C - dot(C - P, n) * n;
         C2 = 1*C_proj ;
@@ -132,9 +155,9 @@ for i=1:size(l,2)
         rot_q_sectors{i}(j) = q_rot;
         
     end
+    
 end
-
-
+toc
 %%
 idx = 44;
 translated_rotated_offsets = translated_rotated_offsets_sectored{1,idx};
@@ -153,10 +176,12 @@ ylabel("East-y (m)")
 zlabel("Down-z (m)");
 h = patch("Faces",F,"Vertices",translated_rotated_V);
 set(h,"FaceColor",[0.30,0.75,0.93],"EdgeColor",[0.94,0.94,0.94])
-quiver3(translated_rotated_offsets(:,1),translated_rotated_offsets(:,2),translated_rotated_offsets(:,3),rot_inverted_normal(:,1),rot_inverted_normal(:,2),rot_inverted_normal(:,3))
+quiver3(translated_rotated_offsets(:,1),translated_rotated_offsets(:,2),translated_rotated_offsets(:,3),rot_inverted_normal(:,1),rot_inverted_normal(:,2),rot_inverted_normal(:,3),1,'r')
 for i=1 :size(rot_inverted_normal,1)
     
-    poseplot(rotated_frames_q(i),translated_rotated_offsets(i,:),ScaleFactor=0.015)
+    if(mod(i,10)==0)
+        poseplot(rotated_frames_q(i),translated_rotated_offsets(i,:),ScaleFactor=0.015)
+    end
 
 end
 hold off
@@ -179,7 +204,7 @@ end
 
 
 %% Repacking and Combining into CSV
-save("poses_P_xyzO_wxyz.mat","posesq_sectored")
+save("poses_egg_P_xyzO_wxyz.mat","posesq_sectored")
 % t = cell2table(posesq_sectored);
 % writetable(t,'poses_P_xyzO_wxyz.csv')
 % matrixq = compact(rotated_frames_q);

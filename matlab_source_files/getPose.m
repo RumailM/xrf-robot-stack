@@ -9,7 +9,7 @@ function [pose, angles] = getPose(locations, vectors)
 rpy = zeros(size(vectors,1),3);
 % p1 = [1/3,1/3,1/3];
 p1 = [0,0,1];
-y_1 = [0; 1; 0];
+% y_1 = [0; 1; 0];
 
 % angles = []
 for i=1:size(vectors,1)
