@@ -5,11 +5,11 @@
 % in the real world. 
 
 %%  Import the object to read and plot
-[V F N name] = stlRead("egg_50cm_3120.stl");
+% [V F N name] = stlRead("egg_50cm_3120.stl");
 
 % [V F N name] = stlRead("Trash_can_v4.stl"); % 15 seconds
 
-% [V F N name] = stlRead("trash_can.stl"); % 15 seconds
+[V F N name] = stlRead("trash_can.stl"); % 15 seconds
 
 
 
@@ -20,7 +20,7 @@ z_displacement = 0;
 
 % tool_length = 0.1275;
 % lambda = 0.1275;
-lambda = 0.016; %10 cm
+lambda = 0.006; %10 cm
 
 yaw_angle_rotate = 0;
 % p = [x_displacement; y_displacement; z_displacement];

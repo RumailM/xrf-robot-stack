@@ -55,7 +55,7 @@
       <geometry>
   <!-- <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/> -->
 	<!-- <mesh filename="package://iiwa_tool_description/meshes/visual/tool.stl"/> -->
-		<cylinder length="0.2550" radius="0.020"/>
+		<cylinder length="0.23" radius="0.020"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -64,7 +64,7 @@
       <geometry>
   <!-- <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/> -->
 	<!-- <mesh filename="package://iiwa_tool_description/meshes/visual/tool.stl"/> -->
-		<cylinder length="0.2550" radius="0.020"/>
+		<cylinder length="0.23" radius="0.020"/>
       </geometry>
       <material name="Grey"/>
     </collision>
