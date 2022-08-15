@@ -11,16 +11,48 @@
 
 [V F N name] = stlRead("trash_can.stl"); % 15 seconds
 
+%%
+% Ff = []
+% Nn = []
+factor = 80;
+Ff = zeros(3,ceil(size(F,1)/factor))';
+Nn = zeros(3,ceil(size(F,1)/factor))';
+count = 1;
+for i=1:factor:size(F,1)
+    
+
+    Ff(count,:) = F(i,:);
+    Nn(count,:) = N(i,:);
+%     disp(count)
+    
+%     Ff= [Ff ;
+%         F(i,:)];
+%     Nn= [Nn ;
+%         Nn(i,:)];
+
+count = count + 1;
+
+    
+end
+
+size(Ff)
 
 
+%%
+
+F =Ff;
+N =Nn;
 %% Set transformation parameters
-x_displacement = 0.95; 
+x_displacement = 0.9;% x_displacement = 0.95; 
 y_displacement = 0;
 z_displacement = 0;
 
 % tool_length = 0.1275;
 % lambda = 0.1275;
-lambda = 0.006; %10 cm
+% lambda = 0.006; %6 mm
+% lambda = 0.02; % 2cm
+lambda = 0.05; % 2cm
+
 
 yaw_angle_rotate = 0;
 % p = [x_displacement; y_displacement; z_displacement];
@@ -49,7 +81,7 @@ for i=1:size(poses,1)
 
 end
 %%
-num_sectors = 48;
+num_sectors = 96;
 degrees_per_sector = 360/num_sectors;
 g = {};
 for j=1:num_sectors
@@ -179,9 +211,9 @@ set(h,"FaceColor",[0.30,0.75,0.93],"EdgeColor",[0.94,0.94,0.94])
 quiver3(translated_rotated_offsets(:,1),translated_rotated_offsets(:,2),translated_rotated_offsets(:,3),rot_inverted_normal(:,1),rot_inverted_normal(:,2),rot_inverted_normal(:,3),1,'r')
 for i=1 :size(rot_inverted_normal,1)
     
-    if(mod(i,10)==0)
-        poseplot(rotated_frames_q(i),translated_rotated_offsets(i,:),ScaleFactor=0.015)
-    end
+%     if(mod(i,10)==0)
+%         poseplot(rotated_frames_q(i),translated_rotated_offsets(i,:),ScaleFactor=0.015)
+%     end
 
 end
 hold off
@@ -189,6 +221,8 @@ hold off
 
 %% Resorting for best scanning motions + rotate eef
 posesq_sectored= {};
+tic
+toc
 for i=1:size(g,2)
 %     comb = [ translated_rotated_offsets_sectored{1,i} compact(rot_q_sectors{1,i}*quaternion(rotz(eff_rotate_angle),'rotmat','frame')) rot_inverted_normal_sectored{1,i} ];
     comb = [ translated_rotated_offsets_sectored{1,i} compact(rot_q_sectors{1,i}) rot_inverted_normal_sectored{1,i} ];
@@ -202,9 +236,12 @@ for i=1:size(g,2)
         posesq_sectored{1,i}= [comb];
 end
 
+toc
 
 %% Repacking and Combining into CSV
-save("poses_egg_P_xyzO_wxyz.mat","posesq_sectored")
+% save("poses_egg_P_xyzO_wxyz.mat","posesq_sectored")
+save("poses_tc_P_xyzO_wxyz.mat","posesq_sectored")
+
 % t = cell2table(posesq_sectored);
 % writetable(t,'poses_P_xyzO_wxyz.csv')
 % matrixq = compact(rotated_frames_q);

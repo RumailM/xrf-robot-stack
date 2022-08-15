@@ -36,8 +36,8 @@
   
   <!-- Tool properties -->
   <property name="tool_mass" value="0.200" />
-  <property name="tool_joint_offset" value="0.00 0.00 0.00" />
-  <property name="tool_link_offset" value="0.00 0.00 0.1275" />
+  <property name="tool_joint_offset" value="0.00 0.00 0.125" />
+  <property name="tool_link_offset" value="0.00 0.00 0.125" />
   
   <!--  Here we define a dummy joint between the tip of the iiwa14 and the base of the tool. 
   There is no offset between the two, that means the tool is attached at the robot flange ${PI/2.0} . -->
@@ -55,7 +55,8 @@
       <geometry>
   <!-- <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/> -->
 	<!-- <mesh filename="package://iiwa_tool_description/meshes/visual/tool.stl"/> -->
-		<cylinder length="0.23" radius="0.020"/>
+		<cylinder length="0.250" radius="0.07"/>
+    <!-- <cylinder length="0.250" radius="0.001"/> -->
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -64,7 +65,8 @@
       <geometry>
   <!-- <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/> -->
 	<!-- <mesh filename="package://iiwa_tool_description/meshes/visual/tool.stl"/> -->
-		<cylinder length="0.23" radius="0.020"/>
+		<cylinder length="0.250" radius="0.07"/>
+    <!-- <cylinder length="0.250" radius="0.001"/> -->
       </geometry>
       <material name="Grey"/>
     </collision>

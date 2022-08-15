@@ -3,14 +3,15 @@ function [filtered_poses_sectored] = tool_path_generator(bof,off,rf,rfac,lf,lowt
 % Should the toolpath only have endpoints along the scanning points, or
 % should it try to backoff before and after each scanning point
 % this may reduce collisions!
-
+% bof = 1;
+% off = 0.1,rf = 0,rfac=10, lf =1,lowthresh=0.11, poses_mat = "poses_tc_P_xyzO_wxyz.mat"
 %% converssions
-bof = str2num(bof);
-off = str2num(off);
-rf = str2num(rf);
-rfac = str2num(rfac);
-lf = str2num(lf);
-lowthresh = str2num(lowthresh);
+% bof = str2num(bof);
+% off = str2num(off);
+% rf = str2num(rf);
+% rfac = str2num(rfac);
+% lf = str2num(lf);
+% lowthresh = str2num(lowthresh);
 poses_mat = string(poses_mat);
 
 %%
@@ -18,7 +19,7 @@ backOffFlag = bof; %  1: for back off between scanning points, 0 for not
 offset = off; % 0.05: offset how far it should back off 0.05 = 5 cm
 
 %reduce the number of scanning points, for testing purposes, makes the scan
-%more sparese
+%more sparesenum
 reduceFlag = rf; % 0: if 1, make sparse, otherwise use all scanning points
 reduceFactor = rfac; % 10: take every reduceFactor-th(10th for example) point, discard rest
 
@@ -75,8 +76,9 @@ invalid_cmd = [];
 
 m = rosmessage(cartesian_command_publisher);
 
-home_pose = [0.0 0.0 0.8059999 0.707 0.0 0.707 0.0];
-% home_pose = computeOffset(posesq_sectored{1,1}(50,:),0.1)
+home_pose = [0.0 0.0 1.3 1 0.0 0 0.0 ];
+% home_pose = [0.0 0.0 0.8059999 0.707 0.0 0.707 0.0  ];
+% home_pose = [computeOffset(posesq_sectored{1,1}(50,:),0.1)];
 
 
 m = fillCommandMsg(m,home_pose);
@@ -89,13 +91,13 @@ pause(2)
 
 
 index = 1
-for j = 1:size(posesq_sectored,2)
+for j = 1:2 %size(posesq_sectored,2)
     good_idx = [];
     bad_idx = [];
     actualStates = [];
     sentStates = [];
     if j == 1
-        filtered_poses = [home_pose];
+        filtered_poses = [0.0 0.0 0.8059999 0.707 0.0 0.707 0.0 0 0 0];
     else
         filtered_poses = [];
     end
@@ -244,9 +246,9 @@ for j = 1:size(posesq_sectored,2)
 end
 
 
-save("filtered.mat","filtered_poses_sectored");
-writecell(filtered_poses_sectored,"filtered.csv");
-save("generator_session_variables.mat");
-
+save("filtered4.mat","filtered_poses_sectored");
+writecell(filtered_poses_sectored,"filtered4.csv");
+save("generator_session_variables4.mat");
+% 
 end
 

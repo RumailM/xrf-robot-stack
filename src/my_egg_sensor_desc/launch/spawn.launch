@@ -2,7 +2,7 @@
 <launch>
     <param name="robot_description_egg" command="$(find xacro)/xacro --inorder '$(find my_egg_sensor_desc)/urdf/robot.urdf'" />
     
-    <arg name="x" default="0.95"/>
+    <arg name="x" default="0.9"/>
     <arg name="y" default="0"/>
     <arg name="z" default="0.0"/>
     

@@ -8,13 +8,13 @@
         <collision name="left_bump_sensor_collision">
           <origin rpy="0 0 0" xyz="0 0 0"/>
           <geometry>
-              <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/>
+              <mesh filename="package://my_egg_sensor_desc/meshes/trash_can.stl"/>
           </geometry>
         </collision>
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
           <geometry>
-              <mesh filename="package://my_egg_sensor_desc/meshes/egg_50cm_1600.stl"/>
+              <mesh filename="package://my_egg_sensor_desc/meshes/trash_can.stl"/>
           </geometry>         
         </visual>
         <inertial>
